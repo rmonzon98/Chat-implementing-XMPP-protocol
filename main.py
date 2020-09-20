@@ -68,6 +68,20 @@ if __name__ == '__main__':
                     cliente.logout()
                     login = False
 
+        #Mostrar cuentas
+        elif opcion == '3':
+            print ('\n*************opcion 3*************\nEn esta opcion se muestran cuentas')
+
+        #Eliminar cuenta
+        elif opcion == '4':
+            print ('\n*************opcion 4*************\nEliminar cuenta')
+            if login:
+                cliente.delete_Account()
+                login = False
+            else:
+                print('No ha iniciado sesion')
+
+
         #Terminar programa
         elif (opcion == '99'):
             print ('\nHa elegido salir. Gracias por utilizar el programa')

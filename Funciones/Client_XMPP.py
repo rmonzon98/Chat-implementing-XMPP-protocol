@@ -54,3 +54,11 @@ class Client_XMPP(ClientXMPP):
     """
     def logout(self):
         self.disconnect(wait=True)
+
+    """
+    Funcion: delete_Account
+    Parametros: -
+    ¿Que hace? eliminar cuenta
+    """
+    def delete_Account(self):
+        print('aqui estara el codigo, cuando se me ocurra como :c')
