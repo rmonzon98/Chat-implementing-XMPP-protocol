@@ -9,13 +9,13 @@ if __name__ == '__main__':
 
     print("*"*12,"BIENVENIDO USUARIO","*"*12)
 
-    menu_not_log = """Aun no esta logeado, estas son sus opciones:
+    menu_not_log = """\nAun no esta logeado, estas son sus opciones:
     1. Registrar un usuario
     2. Log in
     99. Salir
     """
     
-    menu_log = """Usted se encuentra logeado, estas son sus opciones:
+    menu_log = """\nUsted se encuentra logeado, estas son sus opciones:
     1. Registrar un usuario
     2. Log out
     3. Mostrar cuentas
@@ -52,7 +52,7 @@ if __name__ == '__main__':
         elif (opcion == '2'):
             print ('\n*************opcion 2*************\nEn esta opcion se inicia o cierra sesion')
             #Si el usuario no se ha logeado, pide usuario y password
-            if (login):
+            if not(login):
                 username = input('Ingrese username: ')
                 password = input('Ingrese password: ')
                 jid = username + server
@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
         #Terminar programa
         elif (opcion == '99'):
-            print ('Ha elegido salir. Gracias por utilizar el programa')
+            print ('\nHa elegido salir. Gracias por utilizar el programa')
             menu = False
         else:
-            print('Eligió la opcion '+opcion+'. Esta opcion no es valida')
+            print('\nEligió la opcion '+opcion+'. Esta opcion no es valida')

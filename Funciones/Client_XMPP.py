@@ -38,6 +38,8 @@ class Client_XMPP(ClientXMPP):
             log = logging.getLogger("XMPP")
             self.send_presence()
             print('Se ha logeado correctamente')
+            return True
+            
         except IqError as e:
             print("Error: %s" % e.iq['error']['text'])
             self.disconnect()
