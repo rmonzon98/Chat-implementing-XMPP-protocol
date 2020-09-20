@@ -11,7 +11,7 @@ class Client_XMPP(ClientXMPP):
 
     """
     Constructor
-    Parametros: username, password y resource
+    Parametros: jid,password
     """
     def __init__(self, jid, password):
         ClientXMPP.__init__(self, jid, password)
@@ -61,4 +61,29 @@ class Client_XMPP(ClientXMPP):
     ¿Que hace? eliminar cuenta
     """
     def delete_Account(self):
-        print('aqui estara el codigo, cuando se me ocurra como :c')
+        """
+        query extraído de:
+        https://stackoverflow.com/questions/24023051/xmppframework-delete-a-registered-user-account 
+        """
+        que = ET.fromstring("<query xmlns='jabber:iq:register'>\<remove/>\</query>")
+        #create an iq stanza type 'set'
+        iq_stanza = self.make_iq_set(ito='redes2020.xyz', ifrom=self.boundjid.user)
+        iq_stanza.append(que)
+        iq_stanza.send()
+        
+    """
+    Funcion: change_Status
+    Parametros: msg_status (mensaje para el status), status
+    ¿Que hace? cambiar status
+    """
+    def change_Status(self, msg_status, status):
+        if status == 1:
+            status = "away"
+        elif status == 2:
+            status = "chat"
+        elif status == 3:
+            status = "xa"
+        elif status == 4:
+            status = "dnd"
+        self.send_presence(pshow = status, pstatus = msg_status)   
+

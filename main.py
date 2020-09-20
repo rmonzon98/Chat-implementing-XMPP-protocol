@@ -38,15 +38,18 @@ if __name__ == '__main__':
 
         #Registrar usuario
         if (opcion == '1'): 
-            print ('\n*************opcion 1*************\nEn esta opcion se crea un nuevo usuario')
-            username = input('Ingrese username: ')
-            password = input('Ingrese password: ')
-            jid = username + server
-            register = Register(jid, password)
-            if register.connect():
-                register.process(block=True)
-            else:
-                print("Error")
+            if (not(login)):
+                print ('\n*************opcion 1*************\nEn esta opcion se crea un nuevo usuario')
+                username = input('Ingrese username: ')
+                password = input('Ingrese password: ')
+                jid = username + server
+                register = Register(jid, password)
+                if register.connect():
+                    register.process(block=True)
+                else:
+                    print("Error")
+            else: 
+                print('Si ya esta logeado, no puede crear otra cuenta')
             
         #Iniciar sesion o cerrar sesion
         elif (opcion == '2'):
@@ -80,7 +83,49 @@ if __name__ == '__main__':
                 login = False
             else:
                 print('No ha iniciado sesion')
+        
+        #Eliminar cuenta
+        elif opcion == '5':
+            print ('\n*************opcion 5*************\nAgregar usuarios como contacto')
+            if login:
+                pass
+            else:
+                print('No ha iniciado sesion')
 
+        #Mostrar detalles de una cuenta
+        elif opcion == '6':
+            print ('\n*************opcion 6*************\nMostrar detalles de una cuenta')
+            if login:
+                pass
+            else:
+                print('No ha iniciado sesion')
+
+        #Enviar mensaje (Mensaje directo)
+        elif opcion == '7':
+            print ('\n*************opcion 7*************\nEnviar mensaje (Mensaje directo)')
+            if login:
+                pass
+            else:
+                print('No ha iniciado sesion')
+
+        #Enviar mensaje (Mensaje directo)
+        elif opcion == '8':
+            print ('\n*************opcion 8*************\nEnviar mensaje (Mensaje grupal)')
+            if login:
+                pass
+            else:
+                print('No ha iniciado sesion')
+
+        #Definir mensaje de presencia
+        elif opcion == '9':
+            print ('\n*************opcion 9*************\nDefinir mensaje de presencia')
+            if login:
+                status = input('Elija su estado \n1. away\n2. chat\n3. xa\n 4. dnd\n')
+                status=int(status)
+                msg_status = input('Ingrese su mensaje del status\n')
+                cliente.change_Status(msg_status,status)
+            else:
+                print('No ha iniciado sesion')
 
         #Terminar programa
         elif (opcion == '99'):
