@@ -6,6 +6,7 @@ if __name__ == '__main__':
 
     menu = True
     login = False
+    group_joined = False
 
     print("*"*12,"BIENVENIDO USUARIO","*"*12)
 
@@ -62,8 +63,8 @@ if __name__ == '__main__':
                 cliente = Client_XMPP(jid, password)
                 if cliente.connect():
                     cliente.process()
+                    print("Se ha logeado correctamente")
                     login = True
-                    print('Se ha conectado exitosamente')
                 else:
                     print('Error')
             else:
@@ -104,15 +105,20 @@ if __name__ == '__main__':
         elif opcion == '7':
             print ('\n*************opcion 7*************\nEnviar mensaje (Mensaje directo)')
             if login:
-                pass
+                jid = input("Destinatario: ")
+                message = input("Ingrese el mensaje que desea enviarle:\n")
+                cliente.send_Direct_Msg(jid, server, message)
             else:
                 print('No ha iniciado sesion')
 
-        #Enviar mensaje (Mensaje directo)
+        #Enviar mensaje (Mensaje grupal)
         elif opcion == '8':
             print ('\n*************opcion 8*************\nEnviar mensaje (Mensaje grupal)')
             if login:
-                pass
+                if group_joined:
+                    print('Pertenece a un grupo, puede enviar un mensaje')
+                else:
+                    print('Aun no pertenece a ningun grupo, entre a uno primero')
             else:
                 print('No ha iniciado sesion')
 
@@ -129,6 +135,9 @@ if __name__ == '__main__':
 
         #Terminar programa
         elif (opcion == '99'):
+            if cliente.connect():
+                    cliente.logout()
+                    login = False 
             print ('\nHa elegido salir. Gracias por utilizar el programa')
             menu = False
         else:

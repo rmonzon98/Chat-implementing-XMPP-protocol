@@ -18,6 +18,7 @@ class Client_XMPP(ClientXMPP):
 
         #Eventos a utilizar
         self.add_event_handler("session_start", self.session_start)
+        self.add_event_handler('message', self.message)
 
         #Plugins
         self.register_plugin('xep_0030') # Service Discovery
@@ -36,10 +37,7 @@ class Client_XMPP(ClientXMPP):
     def session_start(self, event):
         try:
             log = logging.getLogger("XMPP")
-            self.send_presence()
-            print('Se ha logeado correctamente')
-            return True
-            
+            self.send_presence()      
         except IqError as e:
             print("Error: %s" % e.iq['error']['text'])
             self.disconnect()
@@ -87,3 +85,24 @@ class Client_XMPP(ClientXMPP):
             status = "dnd"
         self.send_presence(pshow = status, pstatus = msg_status)   
 
+    """
+    Funcion: message
+    Parametros: msg (mensaje que recibe)
+    ¿Que hace? interpretar el mensaje que ha recibido
+    """
+    def message(self, msg):
+        if str(msg['type']) == 'chat':
+            print("\nHa recibido un mensaje de parte de: ",msg['from'],":\n",msg['body'])
+    
+    """
+    Funcion: send_Direct_Msg
+    Parametros: jid,server, msg
+    ¿Que hace? enviar mensaje
+    """
+    def send_Direct_Msg(self, jid, server, msg):
+        try:
+            user_recipient = jid + server
+            self.send_message(mto= user_recipient, mbody=msg, mfrom=self.boundjid.user, mtype='chat')
+            print("Mensaje enviado a: "+jid)
+        except IqError:
+            print("No se ha recibido respuesta del server")
