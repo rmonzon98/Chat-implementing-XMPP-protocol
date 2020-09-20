@@ -7,14 +7,17 @@ from sleekxmpp.exceptions import IqError, IqTimeout
 from sleekxmpp.xmlstream.stanzabase import ET, ElementBase
 from sleekxmpp.plugins.xep_0096 import stanza, File
 
-class Register(ClientXMPP):
+class Client_XMPP(ClientXMPP):
 
+    """
+    Constructor
+    Parametros: username, password y resource
+    """
     def __init__(self, jid, password):
         ClientXMPP.__init__(self, jid, password)
 
         #Eventos a utilizar
         self.add_event_handler("session_start", self.session_start)
-        self.add_event_handler("register", self.registerNewUser)
 
         #Plugins
         self.register_plugin('xep_0030') # Service Discovery
@@ -26,34 +29,18 @@ class Register(ClientXMPP):
         self.register_plugin('xep_0096') # File transfer 
 
     """
-    Funcion: session_start
-    Parametros: evento
-    ¿que hace? inicia sesion
+    Función: session_start
+    Parametros: -
+    ¿Que hace? cierra sesion
     """
     def session_start(self, event):
-        self.send_presence()
-        self.get_roster()
-        self.disconnect()
-
-    """
-    Funcion: registerNewUser
-    Parametros: iq
-    ¿que hace? registrar un nuevo usuario
-    """
-    def registerNewUser(self, iq):
-        new_iq = self.Iq()
-        new_iq['type'] = 'set'
-        new_iq['register']['username'] = self.boundjid.user
-        new_iq['register']['password'] = self.password
-        
         try:
-            new_iq.send(now=True)
-            print("Se ha creado exitosamente la cuenta: %s" % self.boundjid)
             log = logging.getLogger("XMPP")
-            log.info("Se ha creado exitosamente la cuenta: %s" % self.boundjid)
+            self.send_presence()
+            print('Se ha logeado correctamente')
         except IqError as e:
             print("Error: %s" % e.iq['error']['text'])
             self.disconnect()
         except IqTimeout:
-            print("No response from server.")
+            print("El server se ha tardado")
             self.disconnect()

@@ -1,10 +1,9 @@
 from Register import *
+from Client_XMPP import *
 
 if __name__ == '__main__':
     server = '@redes2020.xyz'
-    username = 'raulinho'
-    password = 'notedigo'
-
+    
     menu = True
     login = False
 
@@ -42,7 +41,7 @@ if __name__ == '__main__':
             print ('\n*************opcion 1*************\nEn esta opcion se crea un nuevo usuario')
             username = input('Ingrese username: ')
             password = input('Ingrese password: ')
-            jid = username+server
+            jid = username + server
             register = Register(jid, password)
             if register.connect():
                 register.process(block=True)
@@ -53,6 +52,16 @@ if __name__ == '__main__':
         #Iniciar sesion o cerrar sesion
         elif (opcion == '2'):
             print ('\n*************opcion 2*************\nEn esta opcion se inicia o cierra sesion')
+            username = input('Ingrese username: ')
+            password = input('Ingrese password: ')
+            jid = username + server
+            cliente = Client_XMPP(jid, password)
+            if cliente.connect():
+                cliente.process()
+                login = True
+                print('Se ha conectado exitosamente')
+            else:
+                print('Error')
         
         #Terminar programa
         elif (opcion == '99'):
