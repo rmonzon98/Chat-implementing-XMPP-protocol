@@ -29,9 +29,9 @@ class Client_XMPP(ClientXMPP):
         self.register_plugin('xep_0096') # File transfer 
 
     """
-    Función: session_start
+    Funcion: session_start
     Parametros: -
-    ¿Que hace? cierra sesion
+    ¿Que hace? inicia sesion
     """
     def session_start(self, event):
         try:
@@ -44,3 +44,11 @@ class Client_XMPP(ClientXMPP):
         except IqTimeout:
             print("El server se ha tardado")
             self.disconnect()
+    
+    """
+    Funcion: session_end
+    Parametros: -
+    ¿Que hace? cierra sesion
+    """
+    def logout(self):
+        self.disconnect(wait=True)

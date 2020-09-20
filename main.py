@@ -48,21 +48,26 @@ if __name__ == '__main__':
             else:
                 print("Error")
             
-
         #Iniciar sesion o cerrar sesion
         elif (opcion == '2'):
             print ('\n*************opcion 2*************\nEn esta opcion se inicia o cierra sesion')
-            username = input('Ingrese username: ')
-            password = input('Ingrese password: ')
-            jid = username + server
-            cliente = Client_XMPP(jid, password)
-            if cliente.connect():
-                cliente.process()
-                login = True
-                print('Se ha conectado exitosamente')
+            #Si el usuario no se ha logeado, pide usuario y password
+            if (login):
+                username = input('Ingrese username: ')
+                password = input('Ingrese password: ')
+                jid = username + server
+                cliente = Client_XMPP(jid, password)
+                if cliente.connect():
+                    cliente.process()
+                    login = True
+                    print('Se ha conectado exitosamente')
+                else:
+                    print('Error')
             else:
-                print('Error')
-        
+                if cliente.connect():
+                    cliente.logout()
+                    login = False
+
         #Terminar programa
         elif (opcion == '99'):
             print ('Ha elegido salir. Gracias por utilizar el programa')
