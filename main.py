@@ -1,9 +1,9 @@
-from Register import *
-from Client_XMPP import *
+from Funciones.Register import *
+from Funciones.Client_XMPP import *
 
 if __name__ == '__main__':
     server = '@redes2020.xyz'
-    
+
     menu = True
     login = False
 
