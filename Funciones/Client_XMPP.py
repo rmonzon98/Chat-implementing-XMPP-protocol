@@ -92,7 +92,9 @@ class Client_XMPP(ClientXMPP):
     """
     def message(self, msg):
         if str(msg['type']) == 'chat':
-            print("\nHa recibido un mensaje de parte de: ",msg['from'],":\n",msg['body'])
+            print("\nHa recibido un mensaje de parte de ",msg['from'],":\n",msg['body'])
+        if str(msg['type']) == 'groupchat':
+            print("\nHa recibido un mensaje grupal de parte de ",msg['from'],":\n",msg['body'])
     
     """
     Funcion: send_Direct_Msg
