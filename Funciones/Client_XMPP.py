@@ -91,10 +91,11 @@ class Client_XMPP(ClientXMPP):
     ¿Que hace? interpretar el mensaje que ha recibido
     """
     def message(self, msg):
+        print("Ha llegado un mensaje")
         if str(msg['type']) == 'chat':
-            print("\nHa recibido un mensaje de parte de ",msg['from'],":\n",msg['body'])
-        if str(msg['type']) == 'groupchat':
-            print("\nHa recibido un mensaje grupal de parte de ",msg['from'],":\n",msg['body'])
+            print("\nMensaje de parte de ",msg['from'],":\n",msg['body'])
+        elif str(msg['type']) == 'groupchat':
+            print('Mensaje grupal de parte de %(from)s:\n%(body)s' %(msg))
     
     """
     Funcion: send_Direct_Msg
@@ -108,6 +109,18 @@ class Client_XMPP(ClientXMPP):
             print("\nMensaje enviado a: "+jid)
         except IqError:
             print("No se ha recibido respuesta del server")
+    
+    """
+    Funcion: send_Msg_group
+    Parametros: room,message
+    ¿Que hace? enviar mensaje a un grupo
+    """
+    def send_Msg_group(self, room, msg):
+        try:
+            self.send_message(mto= room+'@conference.redes2020.xyz', mbody=msg, mtype='groupchat')
+            print("\nMensaje enviado a: "+room+'@conference.redes2020.xyz')
+        except IqError:
+            print("No se ha recibido respuesta del server")
 
     """
     Funcion: createRoom
@@ -119,19 +132,6 @@ class Client_XMPP(ClientXMPP):
         función extraída de:
         https://stackoverflow.com/questions/24133662/sleekxmpp-automatically-accept-all-chat-room-invites
         """
+        self.plugin['xep_0045'].joinMUC(room+'@conference.redes2020.xyz', nickname, wait=True)
         self.nick = nickname
-        self.plugin['xep_0045'].joinMUC(room, self.nick, wait=True)
-    
-    """
-    Funcion: send_Msg_group
-    Parametros: room,message
-    ¿Que hace? enviar mensaje a un grupo
-    """
-    def send_Msg_group(self, room, msg):
-        try:
-            self.send_message(mto= room, mbody=msg, mfrom=self.nick, mtype='groupchat')
-            print("\nMensaje enviado a: "+room)
-        except IqError:
-            print("No se ha recibido respuesta del server")
-
     
