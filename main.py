@@ -117,8 +117,23 @@ if __name__ == '__main__':
             if login:
                 if group_joined:
                     print('Pertenece a un grupo, puede enviar un mensaje')
+                    new_group = input('¿Desea ingresar a uno nuevo? \n1. si \n2. no')
+
+                    if new_group == '1':
+                        room = input("Ingrese el room al que desee entrar. Si este existe, se creara uno nuevo con ese nombre.\nnombre:")
+                        nickname = input ("Ingrese el nickname con el que desea presentarse")
+                        cliente.createRoom(room+'@conference.redes2020.xyz',nickname)
+                    elif new_group == '2':
+                        room = input("Ingrese el room al que desee entrar: ")
+                        msg = input("Ingrese el mensaje que desea enviarle al grupo:\n")
+                        cliente.send_Msg_group(room+'@conference.redes2020.xyz',message)                    
                 else:
                     print('Aun no pertenece a ningun grupo, entre a uno primero')
+                    room = input("Ingrese el room al que desee entrar. Si este existe, se creara uno nuevo con ese nombre.\nnombre:")
+                    nickname = input ("Ingrese el nickname con el que desea presentarse")
+                    cliente.createRoom(room+'@conference.redes2020.xyz',nickname)
+                    group_joined = True
+
             else:
                 print('No ha iniciado sesion')
 

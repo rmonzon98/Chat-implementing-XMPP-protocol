@@ -103,6 +103,33 @@ class Client_XMPP(ClientXMPP):
         try:
             user_recipient = jid + server
             self.send_message(mto= user_recipient, mbody=msg, mfrom=self.boundjid.user, mtype='chat')
-            print("Mensaje enviado a: "+jid)
+            print("\nMensaje enviado a: "+jid)
         except IqError:
             print("No se ha recibido respuesta del server")
+
+    """
+    Funcion: createRoom
+    Parametros: room, nickname
+    ¿Que hace? entrar/crear room y establecer el nickname
+    """
+    def createRoom(self, room, nickname):
+        """
+        función extraída de:
+        https://stackoverflow.com/questions/24133662/sleekxmpp-automatically-accept-all-chat-room-invites
+        """
+        self.nick = nickname
+        self.plugin['xep_0045'].joinMUC(room, self.nick, wait=True)
+    
+    """
+    Funcion: send_Msg_group
+    Parametros: room,message
+    ¿Que hace? enviar mensaje a un grupo
+    """
+    def send_Msg_group(self, room, msg):
+        try:
+            self.send_message(mto= room, mbody=msg, mfrom=self.nick, mtype='groupchat')
+            print("\nMensaje enviado a: "+room)
+        except IqError:
+            print("No se ha recibido respuesta del server")
+
+    
