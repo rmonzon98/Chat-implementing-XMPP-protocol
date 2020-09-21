@@ -1,4 +1,4 @@
-# CHAT IMPLEMENTING XMPP
+# CHAT IMPLEMENTING XMPP PROTOCOL
 > Basic chat in python using sleekxmpp library
 
 ## Table of Contents
