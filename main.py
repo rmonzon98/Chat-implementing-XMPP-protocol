@@ -61,7 +61,7 @@ if __name__ == '__main__':
                 username = input('Ingrese username: ')
                 password = input('Ingrese password: ')
                 jid = username + server
-                cliente = Client_XMPP(jid, password)
+                cliente = Client_XMPP(jid, password, username)
                 if cliente.connect():
                     cliente.process()
                     print("Se ha logeado correctamente")
@@ -90,7 +90,8 @@ if __name__ == '__main__':
         elif opcion == '5':
             print ('\n*************opcion 5*************\nAgregar usuarios como contacto')
             if login:
-                pass
+                user = input("Ingrese al usuario que desea agregar como contacto: ")
+                cliente.add_Contact(user+server)
             else:
                 print('No ha iniciado sesion')
 
@@ -117,19 +118,20 @@ if __name__ == '__main__':
             print ('\n*************opcion 8*************\nEntrar a un grupo')
             if login:
                 room = input("Ingrese el room al que desee entrar. Si este no existe, se creara uno nuevo con ese nombre.\nnombre: ")
-                nickname = input ("Ingrese el nickname con el que desea presentarse: ")
-                cliente.createRoom(room,nickname)
+                print(room)
+                cliente.create_Room(room)
                 group_joined = True
             else:
                 print('No ha iniciado sesion')
 
         #Enviar mensaje (Mensaje grupal)
         elif opcion == '9':
-            print ('\n*************opcion 8*************\nEnviar mensaje a grupo')
+            print ('\n*************opcion 9*************\nEnviar mensaje a grupo')
             if login: 
                 if group_joined:
                     room = input("Ingrese el room al que desee entrar: ")
                     msg = input("Ingrese el mensaje que desea enviarle al grupo:\n")
+                    print(room)
                     cliente.send_Msg_group(room, msg)                    
                 else:
                     print('Aun no pertenece a ningun grupo, entre a uno primero')

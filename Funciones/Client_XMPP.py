@@ -13,8 +13,9 @@ class Client_XMPP(ClientXMPP):
     Constructor
     Parametros: jid,password
     """
-    def __init__(self, jid, password):
+    def __init__(self, jid, password, username):
         ClientXMPP.__init__(self, jid, password)
+        self.nick = username
 
         #Eventos a utilizar
         self.add_event_handler("session_start", self.session_start)
@@ -91,11 +92,12 @@ class Client_XMPP(ClientXMPP):
     ¿Que hace? interpretar el mensaje que ha recibido
     """
     def message(self, msg):
-        print("Ha llegado un mensaje")
+        print(msg)
         if str(msg['type']) == 'chat':
             print("\nMensaje de parte de ",msg['from'],":\n",msg['body'])
         elif str(msg['type']) == 'groupchat':
-            print('Mensaje grupal de parte de %(from)s:\n%(body)s' %(msg))
+            print("Entro al mensaje grupal")
+            print("Mensaje grupal:\n",msg['body'])
     
     """
     Funcion: send_Direct_Msg
@@ -127,11 +129,17 @@ class Client_XMPP(ClientXMPP):
     Parametros: room, nickname
     ¿Que hace? entrar/crear room y establecer el nickname
     """
-    def createRoom(self, room, nickname):
+    def create_Room(self, room):
         """
         función extraída de:
         https://stackoverflow.com/questions/24133662/sleekxmpp-automatically-accept-all-chat-room-invites
         """
-        self.plugin['xep_0045'].joinMUC(room+'@conference.redes2020.xyz', nickname, wait=True)
-        self.nick = nickname
+        self.plugin['xep_0045'].joinMUC(room+'@conference.redes2020.xyz', self.nick, wait=True)
     
+    """
+    Funcion: add_Contact
+    Parametros: user
+    ¿Que hace? envia subscripcion 
+    """
+    def add_Contact(self, user):
+        self.send_presence_subscription(pto=user, ptype=u'subscribe')
