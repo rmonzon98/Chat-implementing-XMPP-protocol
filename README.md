@@ -8,7 +8,8 @@
 
 ## Setup
 
-- python
+- Python 3.8.3
+downloadable: <a href="https://www.python.org/downloads/" target="_blank">`https://www.python.org/downloads/`</a>.
 
 - sleekxmpp library
 > In order to install sleekxmpp run this command

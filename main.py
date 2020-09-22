@@ -27,6 +27,7 @@ if __name__ == '__main__':
     8. Ingresar a un nuevo grupo
     9. Enviar mensaje (Mensaje de grupo)
     10. Definir mensaje de presencia
+    11. Mostrar contactos
     99. Salir
     """
 
@@ -41,7 +42,7 @@ if __name__ == '__main__':
         #Registrar usuario
         if (opcion == '1'): 
             if (not(login)):
-                print ('\n*************opcion 1*************\nEn esta opcion se crea un nuevo usuario')
+                print ("*"*12,"opcion 1", "*"*12,"\nEn esta opcion se crea un nuevo usuario")
                 username = input('Ingrese username: ')
                 password = input('Ingrese password: ')
                 jid = username + server
@@ -55,7 +56,7 @@ if __name__ == '__main__':
             
         #Iniciar sesion o cerrar sesion
         elif (opcion == '2'):
-            print ('\n*************opcion 2*************\nEn esta opcion se inicia o cierra sesion')
+            print ("*"*12,"opcion 2", "*"*12,"\nEn esta opcion se inicia o cierra sesion")
             #Si el usuario no se ha logeado, pide usuario y password
             if not(login):
                 username = input('Ingrese username: ')
@@ -75,11 +76,15 @@ if __name__ == '__main__':
 
         #Mostrar cuentas
         elif opcion == '3':
-            print ('\n*************opcion 3*************\nEn esta opcion se muestran cuentas')
+            print ("*"*12,"opcion 3", "*"*12,"\nEn esta opcion se muestran cuentas")
+            if login:
+                cliente.show_Users()
+            else:
+                print('No ha iniciado sesion')
 
         #Eliminar cuenta
         elif opcion == '4':
-            print ('\n*************opcion 4*************\nEliminar cuenta')
+            print ("*"*12,"opcion 4", "*"*12,"\nEliminar cuenta")
             if login:
                 cliente.delete_Account()
                 login = False
@@ -88,7 +93,7 @@ if __name__ == '__main__':
         
         #Eliminar cuenta
         elif opcion == '5':
-            print ('\n*************opcion 5*************\nAgregar usuarios como contacto')
+            print ("*"*12,"opcion 5", "*"*12,"\nAgregar usuarios como contacto")
             if login:
                 user = input("Ingrese al usuario que desea agregar como contacto: ")
                 cliente.add_Contact(user+server)
@@ -97,15 +102,17 @@ if __name__ == '__main__':
 
         #Mostrar detalles de una cuenta
         elif opcion == '6':
-            print ('\n*************opcion 6*************\nMostrar detalles de una cuenta')
+            print ("*"*12,"opcion 6", "*"*12,"\nMostrar detalles de una cuenta")
             if login:
-                pass
+                jid = input('Ingrese usuario: ')
+                jid = jid
+                cliente.show_one(jid)
             else:
                 print('No ha iniciado sesion')
 
         #Enviar mensaje (Mensaje directo)
         elif opcion == '7':
-            print ('\n*************opcion 7*************\nEnviar mensaje (Mensaje directo)')
+            print ("*"*12,"opcion 7", "*"*12,"\nEnviar mensaje (Mensaje directo)")
             if login:
                 jid = input("Destinatario: ")
                 message = input("Ingrese el mensaje que desea enviarle:\n")
@@ -115,9 +122,9 @@ if __name__ == '__main__':
 
         #Entrar/crear grupo
         elif opcion == '8':
-            print ('\n*************opcion 8*************\nEntrar a un grupo')
+            print ("*"*12,"opcion 8", "*"*12,"\nEntrar a un grupo")
             if login:
-                room = input("Ingrese el room al que desee entrar. Si este no existe, se creara uno nuevo con ese nombre.\nnombre: ")
+                room = input('Ingrese el room al que desee entrar. Si este no existe, se creara uno nuevo con ese nombre.\nnombre: ')
                 print(room)
                 cliente.create_Room(room)
                 group_joined = True
@@ -126,11 +133,11 @@ if __name__ == '__main__':
 
         #Enviar mensaje (Mensaje grupal)
         elif opcion == '9':
-            print ('\n*************opcion 9*************\nEnviar mensaje a grupo')
+            print ("*"*12,"opcion 9", "*"*12,"\nEnviar mensaje a grupo")
             if login: 
                 if group_joined:
-                    room = input("Ingrese el room al que desee entrar: ")
-                    msg = input("Ingrese el mensaje que desea enviarle al grupo:\n")
+                    room = input('Ingrese el room al que desea enviar el mensaje: ')
+                    msg = input('Ingrese el mensaje que desea enviarle al grupo:\n')
                     print(room)
                     cliente.send_Msg_group(room, msg)                    
                 else:
@@ -140,12 +147,20 @@ if __name__ == '__main__':
 
         #Definir mensaje de presencia
         elif opcion == '10':
-            print ('\n*************opcion 10*************\nDefinir mensaje de presencia')
+            print ("*"*12,"opcion 10", "*"*12,"\nDefinir mensaje de presencia")
             if login:
                 status = input('Elija su estado \n1. away\n2. chat\n3. xa\n 4. dnd\n')
                 status=int(status)
                 msg_status = input('Ingrese su mensaje del status\n')
                 cliente.change_Status(msg_status,status)
+            else:
+                print('No ha iniciado sesion')
+        
+        #Imprimir contactos
+        elif opcion == '11':
+            print ("*"*12,"opcion 11", "*"*12,"\nMostrar contactos")
+            if login:
+                cliente.show_Friends()
             else:
                 print('No ha iniciado sesion')
 
