@@ -2,6 +2,9 @@ import sleekxmpp
 
 import logging
 import threading
+from tabulate import tabulate
+import sys
+import base64
 
 from sleekxmpp import ClientXMPP
 from sleekxmpp.exceptions import IqError, IqTimeout
@@ -123,14 +126,21 @@ class Client_XMPP(ClientXMPP):
     ¿Que hace? interpretar el mensaje que ha recibido
     """
     def message(self, msg):
-        print(msg)
-        if str(msg['type']) == 'chat':
-            print("\nNUEVA NOTIFICACION\nMensaje de parte de ",msg['from'],":\n",msg['body'])
-        elif str(msg['type']) == 'groupchat':
-            print(msg)
-            if msg['mucnick'] != self.nick:
-                print("NUEVA NOTIFICACION\nEntro al mensaje grupal")
-                print("Mensaje grupal:\n",msg['body'])
+        print("\nNUEVA NOTIFICACION\nHA LLEGADO UN MENSAJE TIPO %s" % msg['type'])
+        if len(msg['body']) > 3000:
+            image_rec = msg['body'].encode('utf-8')
+            image_rec = base64.decodebytes(image_rec)
+            with open("imagenrecibida.png", "wb") as fh:
+                fh.write(image_rec)
+            print("Imagen recibida")
+        else: 
+            print(msg)    
+            from_user = str(msg['from'])
+            body_msg = str(msg['body'])
+            table_info = []
+            table_info.append((from_user,body_msg))
+            table = tabulate(table_info, headers=['From', 'Message'], tablefmt='grid')
+            print(table)
         
     """
     Funcion: send_Direct_Msg
@@ -169,7 +179,7 @@ class Client_XMPP(ClientXMPP):
         https://stackoverflow.com/questions/24133662/sleekxmpp-automatically-accept-all-chat-room-invites
         """
         room = room + '@conference.redes2020.xyz'
-        self.plugin['xep_0045'].joinMUC(room, self.nick, wait=True)
+        self.plugin['xep_0045'].joinMUC(room, self.nick)
     
     """
     Funcion: add_Contact
@@ -214,6 +224,7 @@ class Client_XMPP(ClientXMPP):
             users = iq_stanza.send()
             cont = 0
             data= []
+            users_info = []
             for i in users.findall('.//{jabber:x:data}value'):
                 cont += 1
                 user_data = ''
@@ -222,8 +233,9 @@ class Client_XMPP(ClientXMPP):
                 data.append(user_data)
                 if cont == 4:
                     cont = 0
-                    print ("|Email: ", data[0], " |JID: ", data[1], " |Username: ", data[2], " |Name: ", data[3])
+                    users_info.append(data)
                     data=[]
+            return users_info
         except IqError as err:
             print('No se pueden mostrar: %s' % err)
         except IqTimeout:
@@ -260,6 +272,7 @@ class Client_XMPP(ClientXMPP):
             print(users)
             cont = 0
             data= []
+            users_info = []
             for i in users.findall('.//{jabber:x:data}value'):
                 cont += 1
                 user_data = ''
@@ -268,8 +281,9 @@ class Client_XMPP(ClientXMPP):
                 data.append(user_data)
                 if cont == 4:
                     cont = 0
-                    print ("|Email: ", data[0], " |JID: ", data[1], " |Username: ", data[2], " |Name: ", data[3])
+                    users_info.append(data)
                     data=[]
+            return users_info
         except IqError as err:
             print('No se pueden mostrar: %s' % err)
         except IqTimeout:
@@ -312,3 +326,21 @@ class Client_XMPP(ClientXMPP):
                         status = pres['status']
                 if(jid != self.boundjid.user+'@redes2020.xyz'):
                     print("|Jid: ",jid,"|Sub: ",sub)
+
+    """
+    Funcion: send_file
+    Parametros: -
+    ¿Que hace? muestra a los contactos agregados
+    """
+    def send_File(self, recipient, server, filename):
+        message = ''
+        with open(filename, "rb") as img_file:
+            message = base64.b64encode(img_file.read()).decode('utf-8')
+        try:
+            recipient = recipient + server
+            self.send_message(mto=recipient,mbody=message,mtype="chat")
+            print("Imagen enviada a ",recipient)
+        except IqError:
+            print("Error al enviar imagen")
+        except IqTimeout:
+            print("No se ha recibido respuesta del server")

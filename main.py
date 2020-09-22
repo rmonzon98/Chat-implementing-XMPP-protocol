@@ -1,6 +1,8 @@
 from Funciones.Register import *
 from Funciones.Client_XMPP import *
 
+from tabulate import tabulate
+
 if __name__ == '__main__':
     server = '@redes2020.xyz'
 
@@ -28,6 +30,7 @@ if __name__ == '__main__':
     9. Enviar mensaje (Mensaje de grupo)
     10. Definir mensaje de presencia
     11. Mostrar contactos
+    12. Enviar imagen
     99. Salir
     """
 
@@ -78,7 +81,9 @@ if __name__ == '__main__':
         elif opcion == '3':
             print ("*"*12,"opcion 3", "*"*12,"\nEn esta opcion se muestran cuentas")
             if login:
-                cliente.show_Users()
+                list_users = cliente.show_Users()
+                table = tabulate(list_users, headers=['Email', 'JID', 'Username', 'Name'], tablefmt='grid')
+                print(table)
             else:
                 print('No ha iniciado sesion')
 
@@ -160,7 +165,19 @@ if __name__ == '__main__':
         elif opcion == '11':
             print ("*"*12,"opcion 11", "*"*12,"\nMostrar contactos")
             if login:
-                cliente.show_Friends()
+                list_users = cliente.show_Friends()
+                table = tabulate(list_users, headers=['Email', 'JID', 'Username', 'Name'], tablefmt='grid')
+                print(table)
+            else:
+                print('No ha iniciado sesion')
+
+        #Enviar imagen
+        elif opcion == '12':
+            print ("*"*12,"opcion 12", "*"*12,"\nEnviar imagen")
+            if login:
+                user = input('Destinatario: ')
+                file_path = input('file path: ')
+                cliente.send_File(user, server, file_path)
             else:
                 print('No ha iniciado sesion')
 
