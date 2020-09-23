@@ -361,8 +361,8 @@ class Client_XMPP(ClientXMPP):
 
     """
     Funcion: send_file
-    Parametros: -
-    ¿Que hace? muestra a los contactos agregados
+    Parametros: recipient, server, filename
+    ¿Que hace? Codifica el archivo y lo envia como mensaje 
     """
     def send_File(self, recipient, server, filename):
         message = ''
