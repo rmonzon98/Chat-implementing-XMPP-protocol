@@ -39,6 +39,7 @@ class Client_XMPP(ClientXMPP):
         self.register_plugin('xep_0077') # In-band Registration
         self.register_plugin('xep_0066') # Out-of-band Data
         self.register_plugin('xep_0096') # File transfer 
+        self.register_plugin('xep_0030')
         self.register_plugin('xep_0047', {
             'auto_accept': True
         })
@@ -68,7 +69,7 @@ class Client_XMPP(ClientXMPP):
             self.send_presence()
             roster = self.get_roster()
             for r in roster['roster']['items'].keys():
-                self.contacts.append(r)   
+                self.contacts.append(r)              
         except IqError as e:
             print("Error: %s" % e.iq['error']['text'])
             self.disconnect()
@@ -126,21 +127,26 @@ class Client_XMPP(ClientXMPP):
     ¿Que hace? interpretar el mensaje que ha recibido
     """
     def message(self, msg):
-        print("\nNUEVA NOTIFICACION\nHA LLEGADO UN MENSAJE TIPO %s" % msg['type'])
-        if len(msg['body']) > 3000:
-            image_rec = msg['body'].encode('utf-8')
-            image_rec = base64.decodebytes(image_rec)
-            with open("imagenrecibida.png", "wb") as fh:
-                fh.write(image_rec)
-            print("Imagen recibida")
-        else: 
-            print(msg)    
-            from_user = str(msg['from'])
-            body_msg = str(msg['body'])
-            table_info = []
-            table_info.append((from_user,body_msg))
-            table = tabulate(table_info, headers=['From', 'Message'], tablefmt='grid')
-            print(table)
+        if str(msg['type']) == 'groupchat':
+            if msg['mucnick'] != self.nick:
+                print("\nNUEVA NOTIFICACION\nHA LLEGADO UN MENSAJE TIPO %s" % msg['type'])
+                table_info = []
+                table_info.append((str(msg['from']), str(msg['body'])))
+                table = tabulate(table_info, headers=['From', 'Message'], tablefmt='grid')
+                print(table)
+        elif str(msg['type']) == 'chat':
+            print("\nNUEVA NOTIFICACION\nHA LLEGADO UN MENSAJE TIPO %s" % msg['type'])
+            if len(msg['body']) > 3000:
+                image_rec = msg['body'].encode('utf-8')
+                image_rec = base64.decodebytes(image_rec)
+                with open("imagenrecibida.png", "wb") as fh:
+                    fh.write(image_rec)
+                print("Imagen recibida")
+            else:
+                table_info = []
+                table_info.append((str(msg['from']), str(msg['body'])))
+                table = tabulate(table_info, headers=['From', 'Message'], tablefmt='grid')
+                print(table)
         
     """
     Funcion: send_Direct_Msg
@@ -167,6 +173,18 @@ class Client_XMPP(ClientXMPP):
             print("\nMensaje enviado a: "+room)
         except IqError:
             print("No se ha recibido respuesta del server")
+    
+    """
+    Funcion: show_Rooms
+    Parametros: -
+    ¿Que hace? Muestra los grupos creados
+    """
+    def show_Rooms(self):
+        result = self['xep_0030'].get_items(jid='conference.redes2020.xyz', iterator=True)
+        print("\nLos grupos existentes son estos: ")
+        for room_name in result['disco_items']:
+            print(room_name['jid'])
+
 
     """
     Funcion: createRoom
@@ -178,8 +196,22 @@ class Client_XMPP(ClientXMPP):
         función extraída de:
         https://stackoverflow.com/questions/24133662/sleekxmpp-automatically-accept-all-chat-room-invites
         """
-        room = room + '@conference.redes2020.xyz'
-        self.plugin['xep_0045'].joinMUC(room, self.nick)
+        room_wished = room + '@conference.redes2020.xyz'
+        exists = False
+        result = self['xep_0030'].get_items(jid='conference.redes2020.xyz', iterator=True)
+        for room_name in result['disco_items']:
+            if room_wished == room_name['jid']:
+                exists = True
+        if exists:
+            print("Se unira al grupo: %s" % room_wished)
+            msg_status = 'Listo para chatear en grupo'
+            self.plugin['xep_0045'].joinMUC(room_wished, self.nick, pstatus=msg_status, pfrom=self.boundjid.full, wait=True)
+        else:
+            print("Se creara el grupo: %s" % room_wished)
+            msg_status= 'Listo para chatear en grupo'
+            self.plugin['xep_0045'].joinMUC(room_wished, self.nick, pstatus=msg_status, pfrom=self.boundjid.full, wait=True)
+            self.plugin['xep_0045'].setAffiliation(room_wished, self.boundjid.full, affiliation='owner')
+            self.plugin['xep_0045'].configureRoom(room_wished, ifrom=self.boundjid.full)      
     
     """
     Funcion: add_Contact

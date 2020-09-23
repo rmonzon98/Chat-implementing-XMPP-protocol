@@ -31,6 +31,7 @@ if __name__ == '__main__':
     10. Definir mensaje de presencia
     11. Mostrar contactos
     12. Enviar imagen
+    13. Mostrar rooms
     99. Salir
     """
 
@@ -181,12 +182,23 @@ if __name__ == '__main__':
             else:
                 print('No ha iniciado sesion')
 
+        #Mostrar grupo
+        elif opcion == '13':
+            print ("*"*12,"opcion 13", "*"*12,"\nMostrar grupos")
+            if login:
+                rooms = cliente.show_Rooms()
+            else:
+                print('No ha iniciado sesion')
+
         #Terminar programa
         elif (opcion == '99'):
-            if cliente.connect():
-                    cliente.logout()
-                    login = False 
-            print ('\nHa elegido salir. Gracias por utilizar el programa')
-            menu = False
+            if login:
+                if cliente.connect():
+                        cliente.logout()
+                        login = False 
+                print ('\nHa elegido salir. Gracias por utilizar el programa')
+                menu = False
+            else:
+                menu = False
         else:
             print('\nEligió la opcion '+opcion+'. Esta opcion no es valida')

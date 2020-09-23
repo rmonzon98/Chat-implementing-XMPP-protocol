@@ -23,6 +23,12 @@ $ pip install sleekxmpp
 $ pip install login
 ```
 
+- tabulate library
+> In order to tabulate login run this command 
+```shell
+$ pip install tabulate
+```
+
 ## Documentation
 
 sleekxmpp documentation: <a href="https://sleekxmpp.readthedocs.io/en/latest/" target="_blank">`https://sleekxmpp.readthedocs.io/en/latest/`</a>.

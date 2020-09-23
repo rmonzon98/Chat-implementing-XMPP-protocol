@@ -49,8 +49,6 @@ class Register(ClientXMPP):
         try:
             new_iq.send(now=True)
             print("Se ha creado exitosamente la cuenta: %s" % self.boundjid)
-            log = logging.getLogger("XMPP")
-            log.info("Se ha creado exitosamente la cuenta: %s" % self.boundjid)
         except IqError as e:
             print("Error: %s" % e.iq['error']['text'])
             self.disconnect()
