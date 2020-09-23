@@ -4,7 +4,7 @@
 ## Table of Contents
 
 - [Setup](#setup)
-- [How to run](#How to run)
+- [Instructions](#Instructions)
 - [Documentation](#documentation)
 
 ## Setup
@@ -30,7 +30,7 @@ $ pip install login
 $ pip install tabulate
 ```
 
-## How to run
+## Instructions
 
 - Open (at least) two command shells
 - run this command in all command shells
