@@ -111,8 +111,9 @@ if __name__ == '__main__':
             print ("*"*12,"opcion 6", "*"*12,"\nMostrar detalles de una cuenta")
             if login:
                 jid = input('Ingrese usuario: ')
-                jid = jid
-                cliente.show_one(jid)
+                user = cliente.show_one(jid)
+                table = tabulate(user, headers=['Email', 'JID', 'Username', 'Name'], tablefmt='grid')
+                print(table)
             else:
                 print('No ha iniciado sesion')
 

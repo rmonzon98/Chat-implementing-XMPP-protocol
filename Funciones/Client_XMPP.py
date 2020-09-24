@@ -124,18 +124,7 @@ class Client_XMPP(ClientXMPP):
             text = "xa"
         elif(status == 4):
             text = "dnd"
-
         self.send_presence(pshow=text, pstatus=msg_status)
-        status
-        if status == 1:
-            status = "chat"
-        elif status == 2:
-            status = "away"
-        elif status == 3:
-            status = "xa"
-        elif status == 4:
-            status = "dnd"
-        self.send_presence(pshow = status, pstatus = msg_status)   
 
     """
     Funcion: message
@@ -320,8 +309,6 @@ class Client_XMPP(ClientXMPP):
         iq_stanza.append(que)
         try:
             users = iq_stanza.send()
-            print("Envia la busqueda")
-            print(users)
             cont = 0
             data= []
             users_info = []
