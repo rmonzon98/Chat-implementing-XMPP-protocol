@@ -180,6 +180,10 @@ class Client_XMPP(ClientXMPP):
     ¿Que hace? Muestra los grupos creados
     """
     def show_Rooms(self):
+        """
+        función extraída de:
+        https://stackoverflow.com/questions/39426720/sleekxmpp-muc-room-list-and-discovering
+        """
         result = self['xep_0030'].get_items(jid='conference.redes2020.xyz', iterator=True)
         print("\nLos grupos existentes son estos: ")
         for room_name in result['disco_items']:

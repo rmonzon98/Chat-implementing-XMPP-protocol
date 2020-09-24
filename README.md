@@ -5,6 +5,7 @@
 
 - [Setup](#setup)
 - [Instructions](#Instructions)
+- [Functions](#Functions)
 - [Documentation](#documentation)
 
 ## Setup
@@ -38,6 +39,23 @@ $ pip install tabulate
 $ python main.py
 ```
 - try functions
+
+## Functions
+
+In this project you will see the following functionalities:
+
+- Register new account
+- Delete an account
+- Log in
+- Log out
+- Show all users registered in the server
+- Show all users added as contacs
+- Send message to an user
+- Send message to a group
+- Send/receive notificactions
+- Send/receive images
+- Show all groups registered
+
 
 ## Documentation
 
