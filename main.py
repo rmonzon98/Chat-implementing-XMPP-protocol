@@ -155,10 +155,9 @@ if __name__ == '__main__':
         elif opcion == '10':
             print ("*"*12,"opcion 10", "*"*12,"\nDefinir mensaje de presencia")
             if login:
-                status = input('Elija su estado \n1. away\n2. chat\n3. xa\n 4. dnd\n')
-                status=int(status)
-                msg_status = input('Ingrese su mensaje del status\n')
-                cliente.change_Status(msg_status,status)
+                opcion = input('Elija su estado:\n1. chat\n2. away\n3. xa\n4. dnd\n')
+                msg = input ('Ingese su mensaje: ')
+                cliente.change_Status(msg, opcion)
             else:
                 print('No ha iniciado sesion')
         
@@ -167,7 +166,7 @@ if __name__ == '__main__':
             print ("*"*12,"opcion 11", "*"*12,"\nMostrar contactos")
             if login:
                 list_users = cliente.show_Friends()
-                table = tabulate(list_users, headers=['Email', 'JID', 'Username', 'Name'], tablefmt='grid')
+                table = tabulate(list_users, headers=['Jid', 'Sub type'], tablefmt='grid')
                 print(table)
             else:
                 print('No ha iniciado sesion')

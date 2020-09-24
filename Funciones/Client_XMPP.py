@@ -25,6 +25,7 @@ class Client_XMPP(ClientXMPP):
         self.add_event_handler("session_start", self.session_start)
         self.add_event_handler('message', self.message)
         self.add_event_handler("changed_status", self.wait_for_presences)
+        self.add_event_handler('presence_subscribe',self.new_user_suscribed)
         self.add_event_handler("changed_subscription", self.friend_notification)
 
         self.received = set()
@@ -46,12 +47,15 @@ class Client_XMPP(ClientXMPP):
 
     """
     Funcion extraida de:
-    https://stackoverflow.com/questions/24023051/xmppframework-delete-a-registered-user-account 
+    https://github.com/fritzy/SleekXMPP/blob/develop/examples/roster_browser.py  
     """
     def wait_for_presences(self, pres):
         """
         Track how many roster entries have received presence updates.
         """
+        if pres['from'].bare != self.boundjid.bare:
+            print("\nNUEVA NOTIFICACION\nHA LLEGADO UN MENSAJE TIPO")
+            print(pres['from'].bare + " ha cambiado su estado a:  " + pres['status'])
         self.received.add(pres['from'].bare)
         if len(self.received) >= len(self.client_roster.keys()):
             self.presences_received.set()
@@ -66,7 +70,7 @@ class Client_XMPP(ClientXMPP):
     def session_start(self, event):
         try:
             log = logging.getLogger("XMPP")
-            self.send_presence()
+            self.send_presence(pstatus='Conectado')
             roster = self.get_roster()
             for r in roster['roster']['items'].keys():
                 self.contacts.append(r)              
@@ -111,10 +115,22 @@ class Client_XMPP(ClientXMPP):
     ¿Que hace? cambiar status
     """
     def change_Status(self, msg_status, status):
+        text = ""
+        if(status == 1):
+            text = "chat"
+        elif(status == 2):
+            text = "away"
+        elif(status == 3):
+            text = "xa"
+        elif(status == 4):
+            text = "dnd"
+
+        self.send_presence(pshow=text, pstatus=msg_status)
+        status
         if status == 1:
-            status = "away"
-        elif status == 2:
             status = "chat"
+        elif status == 2:
+            status = "away"
         elif status == 3:
             status = "xa"
         elif status == 4:
@@ -208,7 +224,7 @@ class Client_XMPP(ClientXMPP):
                 exists = True
         if exists:
             print("Se unira al grupo: %s" % room_wished)
-            msg_status = 'Listo para chatear en grupo'
+            msg_status = 'Grupo listo para ser utilizado'
             self.plugin['xep_0045'].joinMUC(room_wished, self.nick, pstatus=msg_status, pfrom=self.boundjid.full, wait=True)
         else:
             print("Se creara el grupo: %s" % room_wished)
@@ -348,6 +364,7 @@ class Client_XMPP(ClientXMPP):
         self.send_presence()
         self.presences_received.wait(5)
         friends = self.client_roster.groups()
+        list_friends = []
         for friend in friends:
             for jid in friends[friend]:
                 self.contacts.append(jid)
@@ -361,7 +378,8 @@ class Client_XMPP(ClientXMPP):
                     if pres['status']:
                         status = pres['status']
                 if(jid != self.boundjid.user+'@redes2020.xyz'):
-                    print("|Jid: ",jid,"|Sub: ",sub)
+                    list_friends.append((jid,sub))
+        return list_friends
 
     """
     Funcion: send_file
@@ -380,3 +398,8 @@ class Client_XMPP(ClientXMPP):
             print("Error al enviar imagen")
         except IqTimeout:
             print("No se ha recibido respuesta del server")
+    
+
+    def new_user_suscribed(self,presence):
+        print("\nNUEVA NOTIFICACION\nAlguien te ha agregado")
+        print(str(presence['from'])+'y vos son amigos ahora ')

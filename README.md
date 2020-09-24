@@ -55,6 +55,7 @@ In this project you will see the following functionalities:
 - Send/receive notificactions
 - Send/receive images
 - Show all groups registered
+- Change status
 
 
 ## Documentation
