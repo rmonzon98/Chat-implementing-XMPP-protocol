@@ -402,4 +402,4 @@ class Client_XMPP(ClientXMPP):
 
     def new_user_suscribed(self,presence):
         print("\nNUEVA NOTIFICACION\nAlguien te ha agregado")
-        print(str(presence['from'])+'y vos son amigos ahora ')
+        print(str(presence['from'])+' y vos son amigos ahora ')
